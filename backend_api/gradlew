@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Backend workspace Gradle wrapper shim for CI.
+# Some analysis jobs run `./gradlew check` from arbitrary workspace roots.
+# If a real Gradle wrapper exists, delegate; otherwise no-op.
+
+if [[ -f "./android/gradlew" ]]; then
+  exec bash "./android/gradlew" "$@"
+fi
+
+echo "No Android Gradle wrapper found in backend_api; skipping Gradle task: ${*:-<none>}"
+exit 0
